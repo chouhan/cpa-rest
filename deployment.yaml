@@ -1,0 +1,35 @@
+apiVersion: api/v1
+kind: Deployment
+metadata:
+  name: cpa-rest
+  labels:
+    app: cpa-rest
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpa-rest
+  template:
+    metadata:
+      labels:
+        app: cpa-rest
+    spec:
+      containers:
+        - name: cpa-rest
+          image: chouhan/cpa-rest
+          ports:
+            - containerPort: 9000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpa-rest
+spec:
+  ports:
+  - port: 9001
+    protocol: TCP
+    targetPort: 9000
+  selector:
+    app: cpa-rest
+  type: ClusterIP
