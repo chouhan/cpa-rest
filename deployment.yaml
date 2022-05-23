@@ -1,35 +1,46 @@
-apiVersion: api/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cpa-rest
+  creationTimestamp: null
   labels:
     app: cpa-rest
+  name: cpa-rest
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: cpa-rest
+  strategy: {}
   template:
     metadata:
+      creationTimestamp: null
       labels:
         app: cpa-rest
     spec:
       containers:
-        - name: cpa-rest
-          image: chouhan/cpa-rest
-          ports:
-            - containerPort: 9000
-
+      containers:
+      - name: cpa-rest
+        image: chouhan/cpa-rest:latest
+        imagePullPolicy: Always
+      imagePullSecrets:
+      - name: regcred
+status: {}
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: cpa-rest
+  creationTimestamp: null
+  labels:
+    app: cpa-rest-service
+  name: cpa-rest-service
 spec:
   ports:
-  - port: 9001
+  - name: cpa-rest-service-port
+    port: 9099
     protocol: TCP
-    targetPort: 9000
+    targetPort: 9099
   selector:
     app: cpa-rest
   type: ClusterIP
+status:
+  loadBalancer: {}
